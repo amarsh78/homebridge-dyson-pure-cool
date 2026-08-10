@@ -658,7 +658,7 @@
 
     return {
       platform: 'DysonPureCool',
-      name: 'Dyson Pure Cool',
+      name: state.existingConfig?.name || 'Dyson Pure Cool',
       countryCode: el.country.value,
       devices: selectedDevices.map((d) => {
         const deviceConfig = {
