@@ -258,7 +258,7 @@ describe('JetFocusService', () => {
         expect.objectContaining({
           msg: 'STATE-SET',
           'mode-reason': 'LAPP',
-          data: { ffoc: 'ON' },
+          data: { fdir: 'ON' },
         }),
       );
     });
@@ -269,7 +269,7 @@ describe('JetFocusService', () => {
 
       expect(mockMqttClient.publishCommand).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: { ffoc: 'OFF' },
+          data: { fdir: 'OFF' },
         }),
       );
     });

@@ -10,7 +10,7 @@ import type { DeviceFeatures, DeviceInfo } from './types.js';
 import { MessageCodec, FAN_SPEED, HEATING_TEMP, HUMIDITY, PROTOCOL, FORMAT, TEMPERATURE } from '../protocol/messageCodec.js';
 import type { MqttClientFactory } from './dysonDevice.js';
 import type { MqttConnectFn } from '../protocol/mqttClient.js';
-import { getDeviceFeatures, getPowerProtocol } from '../config/index.js';
+import { getDeviceFeatures, getPowerProtocol, getDeviceByProductType } from '../config/index.js';
 
 // ============================================================================
 // DysonLinkDevice
@@ -299,7 +299,9 @@ export class DysonLinkDevice extends DysonDevice {
    * Set jet focus (front airflow direction) on or off
    */
   async setJetFocus(on: boolean): Promise<void> {
-    this.queueCommand({ ffoc: on ? PROTOCOL.ON : PROTOCOL.OFF });
+    // Link heaters use focused/diffuse airflow; newer models use front/back direction.
+    const field = getDeviceByProductType(this.productType)?.series === 'hot-cool-link' ? 'ffoc' : 'fdir';
+    this.queueCommand({ [field]: on ? PROTOCOL.ON : PROTOCOL.OFF });
   }
 
   /**

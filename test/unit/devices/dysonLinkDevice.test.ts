@@ -107,6 +107,29 @@ describe('DysonLinkDevice', () => {
     });
   });
 
+  describe('setJetFocus protocol', () => {
+    it.each([
+      ['438', 'fdir'], ['520', 'fdir'], ['527', 'fdir'], ['358K', 'fdir'], ['455', 'ffoc'],
+    ])('uses the airflow field for product type %s', async (productType, field) => {
+      const focusDevice = new DysonLinkDevice({ ...defaultDeviceInfo, productType }, mockMqttClientFactory);
+      await focusDevice.connect();
+      try {
+        await focusDevice.setJetFocus(true);
+        await flushMicrotasks();
+        expect(mockMqttClient.publishCommand).toHaveBeenLastCalledWith(
+          expect.objectContaining({ data: { [field]: 'ON' } }),
+        );
+        await focusDevice.setJetFocus(false);
+        await flushMicrotasks();
+        expect(mockMqttClient.publishCommand).toHaveBeenLastCalledWith(
+          expect.objectContaining({ data: { [field]: 'OFF' } }),
+        );
+      } finally {
+        await focusDevice.disconnect();
+      }
+    });
+  });
+
   describe('setFanPower', () => {
     beforeEach(async () => {
       await device.connect();
