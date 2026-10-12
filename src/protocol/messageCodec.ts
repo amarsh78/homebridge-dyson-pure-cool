@@ -92,6 +92,7 @@ export interface RawStateData {
   nmod?: string | [string, string];
   rhtm?: string | [string, string];
   ffoc?: string | [string, string];
+  fdir?: string | [string, string];
   hmod?: string | [string, string];
   hmax?: string | [string, string];
   hsta?: string | [string, string];
@@ -223,9 +224,9 @@ export class MessageCodec {
     }
 
     // Front airflow
-    const ffoc = MessageCodec.extractValue(raw.ffoc);
-    if (ffoc !== undefined) {
-      state.frontAirflow = ffoc === PROTOCOL.ON;
+    const airflow = MessageCodec.extractValue(raw.fdir) ?? MessageCodec.extractValue(raw.ffoc);
+    if (airflow !== undefined) {
+      state.frontAirflow = airflow === PROTOCOL.ON;
     }
 
     // Environmental sensor data

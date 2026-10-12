@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.2-amarsh78.1] - 2026-10-11
+
+### Changed
+
+- Personal build based on upstream 1.4.2, retaining its filter telemetry, connection, configuration, and UI fixes.
+
+### Fixed
+
+- Retain the personal Jet Focus correction: newer purifiers send and read `fdir` for front/back airflow; older Hot+Cool Link models continue using `ffoc`.
+
 ## [1.4.2] - 2026-10-04
 
 ### Fixed

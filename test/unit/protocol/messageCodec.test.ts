@@ -587,3 +587,17 @@ describe('MessageCodec', () => {
     });
   });
 });
+
+describe('airflow direction telemetry', () => {
+  it.each([
+    { raw: { fdir: 'ON' }, expected: true },
+    { raw: { fdir: 'OFF' }, expected: false },
+    { raw: { fdir: ['OFF', 'ON'] as [string, string] }, expected: true },
+    { raw: { fdir: ['ON', 'OFF'] as [string, string] }, expected: false },
+    { raw: { ffoc: 'ON' }, expected: true },
+    { raw: { ffoc: 'OFF' }, expected: false },
+    { raw: { fdir: 'ON', ffoc: 'OFF' }, expected: true },
+  ])('decodes $raw as $expected', ({ raw, expected }) => {
+    expect(MessageCodec.parseRawState(raw).frontAirflow).toBe(expected);
+  });
+});
