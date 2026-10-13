@@ -170,6 +170,40 @@ describe('DysonLinkDevice', () => {
     });
   });
 
+  describe('setFanPower for DP04 (520, fpwr protocol)', () => {
+    let dp04Device: DysonLinkDevice;
+    let dp04MqttClient: ReturnType<typeof createMockMqttClient>;
+
+    beforeEach(async () => {
+      dp04MqttClient = createMockMqttClient();
+      dp04Device = new DysonLinkDevice(
+        { ...defaultDeviceInfo, productType: '520' },
+        vi.fn().mockReturnValue(dp04MqttClient),
+      );
+      await dp04Device.connect();
+    });
+
+    it('should send fpwr ON (not fmod) when turning on', async () => {
+      await dp04Device.setFanPower(true);
+      await flushMicrotasks();
+
+      const command = sentCommand(dp04MqttClient, 0);
+      expect(command.data).toMatchObject({ fpwr: 'ON' });
+      expect(command.data).not.toHaveProperty('fmod');
+    });
+
+    it('should send fpwr OFF (not fmod) when turning off', async () => {
+      await dp04Device.setFanPower(false);
+      await flushMicrotasks();
+
+      expect(dp04MqttClient.publishCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: { fpwr: 'OFF' },
+        }),
+      );
+    });
+  });
+
   describe('activation defaults', () => {
     beforeEach(async () => {
       await device.connect();
