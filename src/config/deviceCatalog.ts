@@ -259,6 +259,7 @@ export const DEVICE_CATALOG: readonly DeviceModel[] = [
     series: 'pure-cool',
     features: FEATURES_PURE_COOL_JET,
     formaldehyde: false,
+    powerProtocol: 'fpwr',
   },
 
   // Hot+Cool Link Series
